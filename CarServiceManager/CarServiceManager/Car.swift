@@ -18,6 +18,13 @@ public struct Car: Equatable, Identifiable {
     
     var serviceRecords: [ServiceRecord]
     
+    var numberOfServicesRequired: Int {
+        serviceRecords.compactMap({($0.carMilageAtServiceDate + $0.serviceInterval < milage) ? 1 : 0}).reduce(0, { $0 + $1 })
+    }
+    
+    var needsService: Bool {
+        numberOfServicesRequired > 0
+    }
 }
 
 public struct ServiceRecord: Equatable, Identifiable {
@@ -26,6 +33,8 @@ public struct ServiceRecord: Equatable, Identifiable {
     let type: ServiceRecordType
     let serviceProvider: String?
     let date: Date
+    let carMilageAtServiceDate: Double
+    let serviceInterval: Double
 }
 
 public enum ServiceRecordType: String {
